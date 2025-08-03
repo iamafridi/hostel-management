@@ -1,6 +1,6 @@
-# 🛍️ Product Management API
+# 🛍️ Hostel Management API
 
-A scalable and type-safe RESTful API for managing products, built with **TypeScript**, **Express.js**, **Zod** validation, and **MongoDB**.  
+A scalable and type-safe RESTful API for managing Hostels, built with **TypeScript**, **Express.js**, **Zod** validation, and **MongoDB**.  
 Deployed on **Vercel Serverless Functions**.
 
 ---
