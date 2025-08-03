@@ -15,22 +15,20 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
     // Set Student role
     userData.role = 'student';
 
-    //set manually generated id 
-    userData.id = '2030100001'
+    //set manually generated id
+    userData.id = '2030100001';
 
     // create a user model
     const newUser = await User.create(userData);
 
     // Create a student
-    if (Object.keys(result).length) {
-        // set id, _id as user 
-        studentData.id = result.id;// embedding id
-        studentData.user = result._id; //reference Id 
+    if (Object.keys(newUser).length) {
+        // set id, _id as user
+        studentData.id = newUser.id; // embedding id
+        studentData.user = newUser._id; //reference Id
 
-        const newStudent = await Student.creat(studentData);
+        const newStudent = await Student.create(studentData);
         return newStudent;
-
-
     }
 };
 
