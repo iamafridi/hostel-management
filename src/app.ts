@@ -1,9 +1,9 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { StudentRoutes } from './app/modules/student/student.route';
 import { UserRoutes } from './app/modules/user/user.route';
-import { success } from 'zod';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
 const app: Application = express();
 // const port = 3000;
 
@@ -25,5 +25,7 @@ app.get('/', getAController);
 
 //Global err handler 
 app.use(globalErrorHandler);
+// Not Found
+app.use(notFound);
 
 export default app;
