@@ -1,13 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { UserServices } from './user.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 
-const createStudent = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
+const createStudent: RequestHandler = async (req, res, next) => {
     try {
         // console.log('req.body:', req.body);
 
@@ -24,7 +20,7 @@ const createStudent = async (
             success: true,
             message: 'Student has created Successfully',
             data: result,
-        })
+        });
     } catch (err) {
         next(err);
     }
