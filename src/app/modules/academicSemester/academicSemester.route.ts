@@ -4,9 +4,13 @@ import validateRequest from '../../middlewares/validateRequest';
 import { academicSemesterValidations } from './academicSemester.validation';
 
 const router = express.Router();
+router.get('/', AcademicSemesterControllers.getAllAcademicSemester);
 
 router.post(
-    '/create-academic-semester', validateRequest(academicSemesterValidations.createAcademicSemesterValidationSchema),
+    '/create-academic-semester',
+    validateRequest(
+        academicSemesterValidations.createAcademicSemesterValidationSchema,
+    ),
     AcademicSemesterControllers.createAcademicSemester,
 );
 // router.get('/:studentId', StudentControllers.getSingleStudent);
