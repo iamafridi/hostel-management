@@ -1,14 +1,16 @@
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
-import { AcademicSemesterServices } from './academicSemester.service';
-import { AcademicFaculty } from './academicFaculty.model';
 import { AcademicFacultyServices } from './academicFaculty.service';
 
 const createAcademicFaculty = catchAsync(async (req, res) => {
+    console.log('Request received:', req.body); // Debug log
+
     const result = await AcademicFacultyServices.createAcademicFacultyIntoDB(
         req.body,
     );
+
+    console.log('Result from DB:', result); // Debug log
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -17,11 +19,9 @@ const createAcademicFaculty = catchAsync(async (req, res) => {
         data: result,
     });
 });
-
-// Get all academic semesters
+// Get all academic faculty
 const getAllAcademicFaculties = catchAsync(async (req, res) => {
-    const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB;
-
+    const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -30,7 +30,7 @@ const getAllAcademicFaculties = catchAsync(async (req, res) => {
     });
 });
 
-// Get a single semester by code
+// Get a single faculty by code
 const getASingleAcademicFaculty = catchAsync(async (req, res) => {
     const { facultyId } = req.params; // Changed from facultyID to code
     const result =
@@ -55,7 +55,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Academic Faculty is retrieved succesfully',
+        message: 'Academic Faculty is updated successfully',
         data: result,
     });
 });

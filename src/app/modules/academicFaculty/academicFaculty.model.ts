@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { model, Schema } from "mongoose";
 import { TAcademicFaculty } from "./academicFaculty.interface";
 
 
