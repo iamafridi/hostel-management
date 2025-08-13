@@ -4,13 +4,13 @@ import catchAsync from '../../utils/catchAsync';
 import { AcademicFacultyServices } from './academicFaculty.service';
 
 const createAcademicFaculty = catchAsync(async (req, res) => {
-    console.log('Request received:', req.body); // Debug log
+    // console.log('Request received:', req.body);
 
     const result = await AcademicFacultyServices.createAcademicFacultyIntoDB(
         req.body,
     );
 
-    console.log('Result from DB:', result); // Debug log
+    // console.log('Result from DB:', result); 
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -32,7 +32,7 @@ const getAllAcademicFaculties = catchAsync(async (req, res) => {
 
 // Get a single faculty by code
 const getASingleAcademicFaculty = catchAsync(async (req, res) => {
-    const { facultyId } = req.params; // Changed from facultyID to code
+    const { facultyId } = req.params;
     const result =
         await AcademicFacultyServices.getSingleAcademicFacultyFromDB(facultyId);
 

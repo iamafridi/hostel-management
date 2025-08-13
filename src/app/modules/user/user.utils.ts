@@ -19,7 +19,7 @@ const findLastStudentId = async () => {
 
 //Generating ID Manually
 export const generateStudentId = async (payload: TAcademicSemester) => {
-    console.log(await findLastStudentId);
+    console.log(await findLastStudentId());
     // first time 0000
     let currentId = (0).toString();  //0000 by default  , used let coz eta reassigned hobe
 
