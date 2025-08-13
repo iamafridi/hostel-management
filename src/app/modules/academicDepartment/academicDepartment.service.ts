@@ -2,15 +2,6 @@ import { TAcademicDepartment } from "./academicDepartment.interface";
 import { AcademicDepartment } from "./academicDepartment.model";
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
-    // Checking for faculty with same name already exists
-    // const existingDepartment = await AcademicDepartment.findOne({
-    //     name: payload.name,
-    // });
-
-    // if (existingDepartment) {
-    //     throw new Error('Department with this name already exists');
-    // }
-
     const result = await AcademicDepartment.create(payload);
     return result;
 };
@@ -29,7 +20,7 @@ const updateAcademicDepartmentIntoDB = async (
     id: string,
     payload: Partial<TAcademicDepartment>,
 ) => {
-    const result = await AcademicDepartment.findByIdAndUpdate(id, payload, {
+    const result = await AcademicDepartment.findOneAndUpdate(id, payload, {
         new: true,
         runValidators: true,
     });
