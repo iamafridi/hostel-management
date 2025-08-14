@@ -37,6 +37,9 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
     },
 );
 
+
+
+
 //jate same year a same semester bar bar na ashe ejonno pre hook diye eta handle kortesi
 
 academicSemesterSchema.pre('save', async function (next) {
