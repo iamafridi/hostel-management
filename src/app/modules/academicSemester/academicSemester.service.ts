@@ -1,6 +1,8 @@
+import AppError from "../../errors/AppError";
 import { academicSemesterNameCodeMapper } from "./academicSemester.constant";
 import { TAcademicSemester } from "./academicSemester.interface";
 import { AcademicSemester } from "./academicSemester.model";
+import httpStatus from 'http-status';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
     // Validate semester name-code mapping
@@ -23,7 +25,7 @@ const getASingleAcademicSemesterFromDB = async (code: string) => {
     const result = await AcademicSemester.findOne({ code });
 
     if (!result) {
-        throw new Error('Academic Semester not found');
+        throw new AppError(httpStatus.NOT_FOUND, 'Academic Semester not found');
     }
 
     return result;

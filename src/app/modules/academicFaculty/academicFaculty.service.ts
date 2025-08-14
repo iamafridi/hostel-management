@@ -1,3 +1,4 @@
+import AppError from '../../errors/AppError';
 import { TAcademicFaculty } from './academicFaculty.interface';
 import { AcademicFaculty } from './academicFaculty.model';
 
@@ -8,7 +9,7 @@ const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
     });
 
     if (existingFaculty) {
-        throw new Error('Faculty with this name already exists');
+        throw new AppError('Faculty with this name already exists');
     }
 
     const result = await AcademicFaculty.create(payload);

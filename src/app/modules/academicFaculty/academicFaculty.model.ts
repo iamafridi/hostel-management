@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { TAcademicFaculty } from './academicFaculty.interface';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
 
 const academicFacultySchema = new Schema<TAcademicFaculty>(
     {
@@ -22,7 +24,7 @@ academicFacultySchema.pre('save', async function (next) {
     });
 
     if (existingFaculty) {
-        throw new Error('Faculty with this name already exists');
+        throw new AppError('Faculty with this name already exists');
     }
 
     next();
@@ -34,7 +36,7 @@ academicFacultySchema.pre('findOneAndUpdate', async function (next) {
     // console.log(query);
     const isFacultyExist = await AcademicFaculty.findOne(query);
     if (!isFacultyExist) {
-        throw new Error('This Faculty does not exist !');
+        throw new AppError(httpStatus.NOT_FOUND, 'This Faculty does not exist !');
     }
     next();
 });

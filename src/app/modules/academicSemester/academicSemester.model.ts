@@ -5,6 +5,9 @@ import {
     Months,
 } from './academicSemester.constant';
 import { TAcademicSemester } from './academicSemester.interface';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
+
 const academicSemesterSchema = new Schema<TAcademicSemester>(
     {
         name: {
@@ -49,7 +52,7 @@ academicSemesterSchema.pre('save', async function (next) {
 
     })
     if (isSemesterExist) {
-        throw new Error('Semester is already exists!!')
+        throw new AppError('Semester is already exists!!')
     }
     next();
 })
@@ -59,7 +62,7 @@ academicSemesterSchema.pre('findOneAndUpdate', async function (next) {
     // console.log(query);
     const isSemesterExist = await AcademicSemester.findOne(query);
     if (!isSemesterExist) {
-        throw new Error('This Semester does not exist !');
+        throw new AppError(httpStatus.NOT_FOUND, 'This Semester does not exist !');
     }
     next();
 });
