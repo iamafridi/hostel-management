@@ -59,12 +59,13 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
         //committing if it passes all the steps 
         await session.commitTransaction()
         await session.endSession()
-
         return newStudent;
     }
     catch (err) {
         await session.abortTransaction()
         await session.endSession()
+
+        throw new Error('Failed to create student');
     }
 };
 
