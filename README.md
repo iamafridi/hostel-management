@@ -154,6 +154,13 @@ Input validation is implemented using Zod schemas. Invalid requests return struc
 src/
 ├── app/
 │   ├── modules/
+│   │   ├── academicDepartment/
+│   │   │   ├── academicDepartment.controller.ts
+│   │   │   ├── academicDepartment.service.ts
+│   │   │   ├── academicDepartment.routes.ts
+│   │   │   ├── academicDepartment.model.ts
+│   │   │   ├── academicDepartment.interface.ts
+│   │   │   └── academicDepartment.validation.ts
 │   │   ├── academicFaculty/
 │   │   │   ├── academicFaculty.controller.ts
 │   │   │   ├── academicFaculty.service.ts
