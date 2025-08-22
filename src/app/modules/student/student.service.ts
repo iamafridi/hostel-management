@@ -4,17 +4,30 @@ import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import httpStatus from 'http-status';
 import { TStudent } from './student.interface';
+
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  console.log('base query', query);
+  const queryObj = { ...query }  //copy
+
+  const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
+
   let searchTerm = '';
   if (query?.searchTerm) {
     searchTerm = query.searchTerm as string;
   }
-
-  const result = await Student.find({
-    $or: ['email', 'name.firstName', 'presentAddress'].map((field) => ({
-      [field]: { $regex: searchTerm, $options: "i" }, //option i for case sensative 
+  const searchQuery = Student.find({
+    $or: studentSearchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' }, //option i for case sensative
     })),
-  })
+  });
+
+  // filtering
+  const excludeFields = ['searchTerm', 'sort'];
+  excludeFields.forEach((el) => delete queryObj[el])
+  // console.log(query, queryObj);
+
+  const filterQuery = searchQuery
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment', // ekhane populate kortesi student ke, er child hocche department and etar grandchild hocche faculty
@@ -23,7 +36,14 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
       },
     });
 
-  return result;
+  let sort = '-createdAt'
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = await filterQuery.sort(sort);
+
+  return sortQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
