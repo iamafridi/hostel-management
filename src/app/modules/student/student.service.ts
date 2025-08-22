@@ -4,16 +4,25 @@ import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import httpStatus from 'http-status';
 import { TStudent } from './student.interface';
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query.searchTerm as string;
+  }
 
-const getAllStudentsFromDB = async () => {
-  const result = await Student.find()
+  const result = await Student.find({
+    $or: ['email', 'name.firstName', 'presentAddress'].map((field) => ({
+      [field]: { $regex: searchTerm, $options: "i" }, //option i for case sensative 
+    })),
+  })
     .populate('admissionSemester')
     .populate({
-      path: 'academicDepartment', //coz ekhane populate kortesi student ke, er child hocche department and etar child of student er grandchild hocche faculty
+      path: 'academicDepartment', // ekhane populate kortesi student ke, er child hocche department and etar grandchild hocche faculty
       populate: {
         path: 'academicFaculty',
       },
-    }); //Amra ekhane Chaining korsi, jehetu amader duita ase faculty and department
+    });
+
   return result;
 };
 
@@ -89,10 +98,10 @@ const deleteStudentFromDB = async (id: string) => {
     await session.endSession();
 
     return deletedStudent;
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error('Failed to create student');
+    throw new Error(err);
   }
 };
 
