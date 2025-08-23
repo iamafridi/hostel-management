@@ -175,6 +175,30 @@ src/
 │   │   │   ├── academicSemester.model.ts
 │   │   │   ├── academicSemester.interface.ts
 │   │   │   └── academicSemester.validation.ts
+│   │   ├── admin/
+│   │   │   ├── admin.constant.ts
+│   │   │   ├── admin.controller.ts
+│   │   │   ├── admin.service.ts
+│   │   │   ├── admin.route.ts
+│   │   │   ├── admin.model.ts
+│   │   │   ├── admin.interface.ts
+│   │   │   └── admin.validation.ts
+│   │   ├── faculty/
+│   │   │   ├── faculty.constant.ts
+│   │   │   ├── faculty.controller.ts
+│   │   │   ├── faculty.service.ts
+│   │   │   ├── faculty.route.ts
+│   │   │   ├── faculty.model.ts
+│   │   │   ├── faculty.interface.ts
+│   │   │   └── faculty.validation.ts
+│   │   ├── room/
+│   │   │   ├── room.constant.ts
+│   │   │   ├── room.controller.ts
+│   │   │   ├── room.service.ts
+│   │   │   ├── room.route.ts
+│   │   │   ├── room.model.ts
+│   │   │   ├── room.interface.ts
+│   │   │   └── room.validation.ts
 │   │   ├── student/
 │   │   │   ├── student.controller.ts
 │   │   │   ├── student.service.ts
