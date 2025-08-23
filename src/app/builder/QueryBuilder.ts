@@ -36,7 +36,7 @@ class QueryBuilder<T> {
 
     //Sorting
     sort() {
-        const sort = this?.query?.sort || '-createdAt';
+        const sort = (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';  //ek er odik field er upor sorting chalaite parbo
         this.modelQuery = this.modelQuery.sort(sort as string);
 
         return this;
