@@ -1,7 +1,7 @@
 # 🏠 Hostel Management System API
 
 A comprehensive and type-safe RESTful API for managing hostel operations, built with **TypeScript**, **Express.js**, **Zod** validation, and **MongoDB**.  
-Features user management, student enrollment, academic faculty management, semester tracking, and scalable architecture.
+Features user management, student enrollment, academic faculty management, semester tracking, room allocation, admin management, faculty management, and scalable architecture.
 
 ---
 
@@ -11,6 +11,10 @@ Features user management, student enrollment, academic faculty management, semes
 - **Student Management**: Create, view, update, and manage students
 - **Academic Semester Management**: Handle semester operations with complete CRUD functionality
 - **Academic Faculty Management**: Create, view, update, and manage academic faculties
+- **Academic Department Management**: Manage academic departments within faculties
+- **Room Management**: Complete room allocation and management system
+- **Admin Management**: Administrative user management and operations
+- **Faculty Management**: Faculty member management and operations
 - **Type-safe Validation**: Request validation using Zod schemas
 - **Error Handling**: Comprehensive error handling with meaningful responses
 - **Modular Architecture**: Clean, scalable folder structure following best practices
@@ -62,6 +66,54 @@ NODE_ENV=development
 
 ## 📦 API Endpoints
 
+### User Management Endpoints
+
+| Method | Endpoint                       | Description        |
+| ------ | ------------------------------ | ------------------ |
+| POST   | `/api/v1/users/create-student` | Create new student |
+| POST   | `/api/v1/users/create-faculty` | Create new faculty |
+| POST   | `/api/v1/users/create-admin`   | Create new admin   |
+| GET    | `/api/v1/users`                | Get all users      |
+| GET    | `/api/v1/users/:userId`        | Get user by ID     |
+| PATCH  | `/api/v1/users/:userId`        | Update user by ID  |
+
+### Student Management Endpoints
+
+| Method | Endpoint                      | Description          |
+| ------ | ----------------------------- | -------------------- |
+| GET    | `/api/v1/students`            | Get all students     |
+| GET    | `/api/v1/students/:studentId` | Get student by ID    |
+| PATCH  | `/api/v1/students/:studentId` | Update student by ID |
+| DELETE | `/api/v1/students/:studentId` | Delete student by ID |
+
+### Faculty Management Endpoints
+
+| Method | Endpoint                       | Description          |
+| ------ | ------------------------------ | -------------------- |
+| GET    | `/api/v1/faculties`            | Get all faculties    |
+| GET    | `/api/v1/faculties/:facultyId` | Get faculty by ID    |
+| PATCH  | `/api/v1/faculties/:facultyId` | Update faculty by ID |
+| DELETE | `/api/v1/faculties/:facultyId` | Delete faculty by ID |
+
+### Admin Management Endpoints
+
+| Method | Endpoint                  | Description        |
+| ------ | ------------------------- | ------------------ |
+| GET    | `/api/v1/admins`          | Get all admins     |
+| GET    | `/api/v1/admins/:adminId` | Get admin by ID    |
+| PATCH  | `/api/v1/admins/:adminId` | Update admin by ID |
+| DELETE | `/api/v1/admins/:adminId` | Delete admin by ID |
+
+### Room Management Endpoints
+
+| Method | Endpoint                    | Description       |
+| ------ | --------------------------- | ----------------- |
+| POST   | `/api/v1/rooms/create-room` | Create new room   |
+| GET    | `/api/v1/rooms`             | Get all rooms     |
+| GET    | `/api/v1/rooms/:roomId`     | Get room by ID    |
+| PATCH  | `/api/v1/rooms/:roomId`     | Update room by ID |
+| DELETE | `/api/v1/rooms/:roomId`     | Delete room by ID |
+
 ### Academic Faculty Endpoints
 
 | Method | Endpoint                                             | Description          |
@@ -70,6 +122,15 @@ NODE_ENV=development
 | GET    | `/api/v1/academic-faculties`                         | Get all faculties    |
 | GET    | `/api/v1/academic-faculties/:facultyId`              | Get faculty by ID    |
 | PATCH  | `/api/v1/academic-faculties/:facultyId`              | Update faculty by ID |
+
+### Academic Department Endpoints
+
+| Method | Endpoint                                                  | Description             |
+| ------ | --------------------------------------------------------- | ----------------------- |
+| POST   | `/api/v1/academic-departments/create-academic-department` | Create new department   |
+| GET    | `/api/v1/academic-departments`                            | Get all departments     |
+| GET    | `/api/v1/academic-departments/:departmentId`              | Get department by ID    |
+| PATCH  | `/api/v1/academic-departments/:departmentId`              | Update department by ID |
 
 ### Academic Semester Endpoints
 
@@ -81,6 +142,47 @@ NODE_ENV=development
 | PATCH  | `/api/v1/academic-semesters/:semesterId`              | Update semester by ID |
 
 ## 📝 Request Examples
+
+### Create Student User
+
+**POST** `/api/v1/users/create-student`
+
+```json
+{
+  "password": "student123",
+  "student": {
+    "name": {
+      "firstName": "elara",
+      "middleName": "binte",
+      "lastName": "sara"
+    },
+    "gender": "male",
+    "dateOfBirth": "1995-06-15",
+    "email": "elara.sara@email.com",
+    "contactNo": "+8801712345678",
+    "emergencyContactNo": "+8801798765432",
+    "bloodGroup": "A+",
+    "presentAddress": "123 Main St, Dhaka",
+    "permanentAddress": "456 Home St, Chittagong",
+    "guardian": {
+      "fatherName": "Afridi Chowdhury",
+      "fatherOccupation": "Engineer",
+      "fatherContactNo": "+8801798765432",
+      "motherName": "Elara",
+      "motherOccupation": "Doctor",
+      "motherContactNo": "+8801798765433"
+    },
+    "localGuardian": {
+      "name": "Uncle Rafi",
+      "occupation": "Businessman",
+      "contactNo": "+8801798765434",
+      "address": "789 Local St, Dhaka"
+    },
+    "admissionSemester": "64f8a1b2c3d4e5f6789012ab",
+    "academicDepartment": "64f8a1b2c3d4e5f6789012ac"
+  }
+}
+```
 
 ### Create Academic Faculty
 
@@ -105,28 +207,6 @@ NODE_ENV=development
     "createdAt": "2024-08-13T10:30:00.000Z",
     "updatedAt": "2024-08-13T10:30:00.000Z"
   }
-}
-```
-
-### Get All Academic Faculties
-
-**GET** `/api/v1/academic-faculties`
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "statusCode": 200,
-  "message": "All Academic Faculties retrieved successfully",
-  "data": [
-    {
-      "_id": "64f8a1b2c3d4e5f6789012ab",
-      "name": "Faculty of Engineering",
-      "createdAt": "2024-08-13T10:30:00.000Z",
-      "updatedAt": "2024-08-13T10:30:00.000Z"
-    }
-  ]
 }
 ```
 
@@ -217,8 +297,8 @@ src/
 │   ├── config/
 │   │   └── index.ts
 │   ├── middlewares/
-│   │   └── globalErrorHandler.ts
-│   │   └── notFound.ts
+│   │   ├── globalErrorHandler.ts
+│   │   ├── notFound.ts
 │   │   └── validateRequest.ts
 │   └── utils/
 │       ├── sendResponse.ts
@@ -235,6 +315,7 @@ src/
 - **Middleware Pattern**: Request validation, error handling, and response formatting
 - **Repository Pattern**: Data access layer with Mongoose models
 - **Factory Pattern**: Consistent response structure across all endpoints
+- **Modular Design**: Each feature is organized into separate modules with clear boundaries
 
 ## 🛡️ Error Handling
 
@@ -259,15 +340,20 @@ You can test the API using tools like:
 
 ## 🔄 Future Enhancements
 
-- [ ] Student management module
-- [ ] Room allocation system
-- [ ] Fee management
-- [ ] Authentication and authorization
-- [ ] File upload functionality
+- [ ] Authentication and authorization (JWT)
+- [ ] Room booking and allocation system
+- [ ] Payment and fee management
+- [ ] Meal management system
+- [ ] Visitor management
+- [ ] Maintenance request system
+- [ ] File upload functionality (profile pictures, documents)
 - [ ] Advanced search and filtering
+- [ ] Email notifications
 - [ ] API rate limiting
 - [ ] Unit and integration tests
 - [ ] API documentation with Swagger
+- [ ] Real-time notifications with WebSocket
+- [ ] Dashboard analytics
 
 ## 🤝 Contributing
 
