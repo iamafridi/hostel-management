@@ -25,10 +25,19 @@ export default [
     },
 
     rules: {
+      // Recommended ESLint rules
       ...jsPlugin.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
-      'prettier/prettier': 'error',
 
+      // Prettier
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+        },
+      ],
+
+      // Custom rules
       eqeqeq: 'off',
       '@typescript-eslint/no-unused-vars': ['error'],
       'prefer-const': ['error', { ignoreReadBeforeAssign: true }],
