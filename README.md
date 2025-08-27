@@ -156,7 +156,7 @@ NODE_ENV=development
       "middleName": "binte",
       "lastName": "sara"
     },
-    "gender": "male",
+    "gender": "Female",
     "dateOfBirth": "1995-06-15",
     "email": "elara.sara@email.com",
     "contactNo": "+8801712345678",
