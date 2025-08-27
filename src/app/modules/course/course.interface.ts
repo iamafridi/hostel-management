@@ -8,8 +8,8 @@ export type TPrerequisiteCourses = {
 export type TCourse = {
     title: string;
     prefix: string;
-    credits: string;
-    code: string;
+    credits: Number;
+    code: Number;
     dues: Number;
     preRequisiteCourses: []
 }
