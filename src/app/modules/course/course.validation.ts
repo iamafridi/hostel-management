@@ -12,7 +12,7 @@ const createCourseValidationSchema = z.object({
         code: z.number().int('Code must be an integer').nonnegative().optional(),
         credits: z.number().nonnegative().optional(),
         dues: z.number().nonnegative().optional(),
-        preRequisiteCourses: z.array(PreRequisiteCourseValidationSchema),
+        preRequisiteCourses: z.array(PreRequisiteCourseValidationSchema).optional(),
     }),
 });
 
