@@ -6,10 +6,7 @@ const preRequisiteCoursesSchema = new Schema<TPrerequisiteCourses>({
         type: Schema.Types.ObjectId,
         ref: 'Course',
     },
-    isDeleted: {
-        type: Boolean,
-        default: false
-    }
+
 })
 
 
@@ -41,6 +38,10 @@ const courseSchema = new Schema<TCourse>({
         type: Number,
     },
     preRequisiteCourses: [preRequisiteCoursesSchema],
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    }
 
 });
 
