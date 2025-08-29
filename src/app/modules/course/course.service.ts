@@ -1,3 +1,4 @@
+import { core } from 'zod';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { CourseSearchableFields } from './course.constant';
 import { TCourse } from './course.interface';
@@ -59,11 +60,22 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
 
         const deletedPreRequisitesCourses = await course.findByIdAndUpdate(id, {
             $pull: { preRequisiteCourses: { course: { $in: deletedPreRequisites } } }
+        });
+        // filtering out the new course fields
+        const newPreRequisites = preRequisiteCourses?.filter(
+            (el) => el.course && !el.isDeleted,
+        )
+        const newPreRequisitesCourses = await course.findByIdAndUpdate(id, {
+            $addToSet: { preRequisiteCourses: { $each: newPreRequisites } }
         })
+
+
     }
 
+    const result = await course.findById(id).populate('preRequisiteCourses.course')
 
-    return updateBasicCourseInfo;
+
+    return result;
 }
 
 export const CourseServices = {
