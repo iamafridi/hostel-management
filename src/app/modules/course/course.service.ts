@@ -13,9 +13,12 @@ const createCourseIntoDB = async (payload: TCourse) => {
 };
 
 // Get all the courses
+// populates both prerequisites and due courses
 const getAllTheCoursesFromDB = async (query: Record<string, unknown>) => {
     const courseQuery = new QueryBuilder(
-        course.find().populate('preRequisiteCourses.course'),
+        course.find()
+            .populate('preRequisiteCourses.course')
+            .populate('dueCourses.course'),
         query,
     )
         .search(CourseSearchableFields)
@@ -29,10 +32,12 @@ const getAllTheCoursesFromDB = async (query: Record<string, unknown>) => {
 };
 
 // get a single id from db
+// populates both prerequisites and due courses
 const getASingleCourseFromDB = async (id: string) => {
     const result = await course
         .findById(id)
-        .populate('preRequisiteCourses.course');
+        .populate('preRequisiteCourses.course')
+        .populate('dueCourses.course'); // Added: Populate due courses
     return result;
 };
 
@@ -47,8 +52,9 @@ const deleteCourseFromDB = async (id: string) => {
 };
 
 // update Service
+//handles both prerequisites and due courses
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
-    const { preRequisiteCourses, ...courseRemainingData } = payload;
+    const { preRequisiteCourses, dueCourses, ...courseRemainingData } = payload; // Added: Extract dueCourses
     const session = await mongoose.startSession();
 
     try {
@@ -102,10 +108,45 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
             }
         }
 
+        //  Handle due courses similar to prerequisites
+        if (dueCourses && dueCourses.length > 0) {
+            // deleted due courses
+            const deletedDueCourses = dueCourses
+                .filter((el) => el.course && el.isDeleted)
+                .map((el) => el.course);
+
+            if (deletedDueCourses.length > 0) {
+                await course.findByIdAndUpdate(
+                    id,
+                    {
+                        $pull: {
+                            dueCourses: { course: { $in: deletedDueCourses } },
+                        },
+                    },
+                    { new: true, runValidators: true, session },
+                );
+            }
+
+            // new due courses
+            const newDueCourses = dueCourses.filter(
+                (el) => el.course && !el.isDeleted,
+            );
+
+            if (newDueCourses.length > 0) {
+                await course.findByIdAndUpdate(
+                    id,
+                    { $addToSet: { dueCourses: { $each: newDueCourses } } },
+                    { new: true, runValidators: true, session },
+                );
+            }
+        }
+
         await session.commitTransaction();
         await session.endSession();
 
-        return course.findById(id).populate('preRequisiteCourses.course');
+        return course.findById(id)
+            .populate('preRequisiteCourses.course')
+            .populate('dueCourses.course');
     } catch (err) {
         await session.abortTransaction();
         await session.endSession();
@@ -118,8 +159,8 @@ const assignFacultiesWithCourseIntoDB = async (
     id: string,
     payload: Partial<TCourseFaculty>,
 ) => {
-    const result = await courseFaculty.findByIdAndUpdate(
-        id,
+    const result = await courseFaculty.findOneAndUpdate(
+        { course: id },
         {
             course: id,
             $addToSet: { faculties: { $each: payload.faculties ?? [] } },
@@ -137,10 +178,10 @@ const removeFacultiesFromCourseFromDB = async (
     id: string,
     payload: Partial<TCourseFaculty>,
 ) => {
-    const result = await courseFaculty.findByIdAndUpdate(
-        id,
+    const result = await courseFaculty.findOneAndUpdate(
+        { course: id },
         {
-            $pull: { faculties: { $in: payload } }
+            $pull: { faculties: { $in: payload.faculties } }
         },
         {
             new: true,

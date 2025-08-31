@@ -49,9 +49,11 @@ const deleteCourse = catchAsync(async (req, res) => {
     });
 });
 
-const updateCourse = catchAsync(as ync(req, res) => {
+
+// Fixed: Added missing semicolon
+const updateCourse = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await CourseServices.updateCourseIntoDB(id, req.body)
+    const result = await CourseServices.updateCourseIntoDB(id, req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -59,7 +61,7 @@ const updateCourse = catchAsync(as ync(req, res) => {
         message: 'Course has been updated successfully',
         data: result,
     });
-})
+});
 
 const assignFacultiesWithCourse = catchAsync(async (req, res) => {
     const { courseId } = req.params;
@@ -73,6 +75,7 @@ const assignFacultiesWithCourse = catchAsync(async (req, res) => {
         data: result,
     });
 });
+
 const removeFacultiesWithCourse = catchAsync(async (req, res) => {
     const { courseId } = req.params;
     const { faculties } = req.body;
@@ -85,9 +88,6 @@ const removeFacultiesWithCourse = catchAsync(async (req, res) => {
         data: result,
     });
 });
-
-
-
 
 export const CourseControllers = {
     createCourse,
