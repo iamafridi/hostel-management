@@ -1,5 +1,6 @@
-import { model, Schema } from 'mongoose';
+import { Model, Schema, model, models } from 'mongoose';
 import { TUser } from './user.interface';
+import { USER_ROLES } from './user.constant';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 
@@ -10,9 +11,15 @@ const userSchema = new Schema<TUser>(
       required: true,
       unique: true,
     },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
     password: {
       type: String,
       required: true,
+      select: false,
     },
     needsPasswordChange: {
       type: Boolean,
@@ -20,22 +27,40 @@ const userSchema = new Schema<TUser>(
     },
     role: {
       type: String,
-      enum: ['student', 'faculty', 'admin'],
+      enum: {
+        values: USER_ROLES,
+        message: '{VALUE} is not a valid role',
+      },
+      required: true,
     },
-
     status: {
       type: String,
       enum: ['in-progress', 'blocked'],
       default: 'in-progress',
     },
+    isDemo: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
-    timestamps: true, // for the createdAt and Updated At
-  });
+    timestamps: true,
+  },
+);
+
+// email is unique only when it is set, existing id based accounts stay valid
+userSchema.index(
+  { email: 1 },
+  { unique: true, partialFilterExpression: { email: { $exists: true } } },
+);
+userSchema.index({ role: 1, status: 1 });
 
 // pre save middleware/ hook : will work on create()  save()
 userSchema.pre('save', async function (next) {
-  // console.log(this, 'pre hook : we will save  data');
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; // doc
   // hashing password and save into DB
@@ -52,4 +77,6 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-export const User = model<TUser>('User', userSchema);
+// the models cache keeps hot reloads on serverless platforms from throwing OverwriteModelError
+export const User: Model<TUser> =
+  (models.User as Model<TUser>) || model<TUser>('User', userSchema);
