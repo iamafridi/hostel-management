@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 import {
   StudentModel,
@@ -184,7 +184,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-
 //creating a custom instance method
 // studentSchema.methods.isUserExists = async function (id: string) {
 //   const existingUser = await Student.findOne({ id });
@@ -192,4 +191,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
 //   return existingUser;
 // };
 
-export const Student = model<TStudent, StudentModel>('Student', studentSchema);
+export const Student: StudentModel =
+  (models.Student as StudentModel) ||
+  model<TStudent, StudentModel>('Student', studentSchema);

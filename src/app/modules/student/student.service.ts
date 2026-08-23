@@ -207,7 +207,6 @@ const deleteStudentFromDB = async (id: string) => {
     // get user _id from deletedStudent
     const userId = deletedStudent.user;
 
-
     // Mark user as deleted
     const deleteUser = await User.findByIdAndUpdate(
       userId,
@@ -223,7 +222,7 @@ const deleteStudentFromDB = async (id: string) => {
     await session.endSession();
 
     return deletedStudent;
-  } catch (err: any) {
+  } catch (err) {
     await session.abortTransaction();
     await session.endSession();
     throw err;
