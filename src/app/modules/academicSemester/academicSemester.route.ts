@@ -13,20 +13,20 @@ router.get('/:code', AcademicSemesterControllers.getASingleAcademicSemester);
 
 // Create new semester
 router.post(
-    '/create-academic-semester',
-    validateRequest(
-        academicSemesterValidations.createAcademicSemesterValidationSchema,
-    ),
-    AcademicSemesterControllers.createAcademicSemester,
+  '/create-academic-semester',
+  validateRequest(
+    academicSemesterValidations.createAcademicSemesterValidationSchema,
+  ),
+  AcademicSemesterControllers.createAcademicSemester,
 );
 
 //update one by ID
 router.patch(
-    '/:semesterId',
-    validateRequest(
-        academicSemesterValidations.updateAcademicSemesterValidationSchema,
-    ),
-    AcademicSemesterControllers.updateAcademicSemester,
+  '/:semesterId',
+  validateRequest(
+    academicSemesterValidations.updateAcademicSemesterValidationSchema,
+  ),
+  AcademicSemesterControllers.updateAcademicSemester,
 );
 
 export const AcademicSemesterRoutes = router;
