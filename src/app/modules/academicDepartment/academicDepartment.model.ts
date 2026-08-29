@@ -1,57 +1,58 @@
-import { model, Schema } from "mongoose";
-import { TAcademicDepartment } from "./academicDepartment.interface";
+import { Model, model, Schema, models } from 'mongoose';
+import { TAcademicDepartment } from './academicDepartment.interface';
 import httpStatus from 'http-status';
-import AppError from "../../errors/AppError";
+import AppError from '../../errors/AppError';
 
 const academicDepartmentSchema = new Schema<TAcademicDepartment>(
-    {
-        name: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        academicFaculty: {
-            type: Schema.Types.ObjectId,
-            ref: "AcademicFaculty",
-        },
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    {
-        timestamps: true,
-    }
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicFaculty',
+    },
+  },
+  {
+    timestamps: true,
+  },
 );
 
-
-
-// Checking for faculty with same name already exists, if it does then it will thorw and error 
+// Checking for faculty with same name already exists, if it does then it will thorw and error
 academicDepartmentSchema.pre('save', async function (next) {
-    //AcademicDepartment er jaigai :-------->>>> this.model! JS e
-    const existingDepartment = await AcademicDepartment.findOne({
-        name: this.name,
-    });
+  //AcademicDepartment er jaigai :-------->>>> this.model! JS e
+  const existingDepartment = await AcademicDepartment.findOne({
+    name: this.name,
+  });
 
-    if (existingDepartment) {
-        throw new AppError(httpStatus.NOT_FOUND, 'Department with this name already exists');
-    }
+  if (existingDepartment) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Department with this name already exists',
+    );
+  }
 
-    next();
+  next();
 });
 
-// for update 
+// for update
 academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
-    const query = this.getQuery();
-    // console.log(query);
-    const isDepartmetentExist = await AcademicDepartment.findOne(query);
-    if (!isDepartmetentExist) {
-        throw new AppError(httpStatus.NOT_FOUND, "This department does not exist !");
-    }
-    next();
+  const query = this.getQuery();
+  // console.log(query);
+  const isDepartmetentExist = await AcademicDepartment.findOne(query);
+  if (!isDepartmetentExist) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'This department does not exist !',
+    );
+  }
+  next();
 });
 
-
-
-export const AcademicDepartment = model<TAcademicDepartment>(
-    "AcademicDepartment",
-    academicDepartmentSchema
-);
+export const AcademicDepartment: Model<TAcademicDepartment> =
+  (models.AcademicDepartment as Model<TAcademicDepartment>) ||
+  model<TAcademicDepartment>('AcademicDepartment', academicDepartmentSchema);
 
 //now ---> validation.

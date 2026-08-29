@@ -1,37 +1,42 @@
-import { TAcademicDepartment } from "./academicDepartment.interface";
-import { AcademicDepartment } from "./academicDepartment.model";
+import { TAcademicDepartment } from './academicDepartment.interface';
+import { AcademicDepartment } from './academicDepartment.model';
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
-    const result = await AcademicDepartment.create(payload);
-    return result;
+  const result = await AcademicDepartment.create(payload);
+  return result;
 };
 
 const getAllAcademicDepartmentFromDB = async () => {
-    const result = await AcademicDepartment.find().populate('academicFaculty'); //Using Mongoose Populate so that referancing data ta amader kache chole ashe, and amader poerty ke point out korte hobe, not model.!!!!!!!!
-    return result;
+  const result = await AcademicDepartment.find().populate('academicFaculty'); //Using Mongoose Populate so that referancing data ta amader kache chole ashe, and amader poerty ke point out korte hobe, not model.!!!!!!!!
+  return result;
 };
 
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-    const result = await AcademicDepartment.findById(id).populate('academicFaculty');
-    return result;
+  const result =
+    await AcademicDepartment.findById(id).populate('academicFaculty');
+  return result;
 };
 
 const updateAcademicDepartmentIntoDB = async (
-    id: string,
-    payload: Partial<TAcademicDepartment>,
+  id: string,
+  payload: Partial<TAcademicDepartment>,
 ) => {
-    const result = await AcademicDepartment.findOneAndUpdate(id, payload, {
-        new: true,
-        runValidators: true,
-    });
-    return result;
+  const result = await AcademicDepartment.findOneAndUpdate(
+    { _id: id },
+    payload,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  return result;
 };
 
 export const AcademicDepartmentServices = {
-    createAcademicDepartmentIntoDB,
-    getAllAcademicDepartmentFromDB,
-    getSingleAcademicDepartmentFromDB,
-    updateAcademicDepartmentIntoDB,
+  createAcademicDepartmentIntoDB,
+  getAllAcademicDepartmentFromDB,
+  getSingleAcademicDepartmentFromDB,
+  updateAcademicDepartmentIntoDB,
 };
 
 // ---> Controller.ts
