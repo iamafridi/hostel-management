@@ -6,37 +6,36 @@ import { RoomValidations } from './room.validation';
 const router = express.Router();
 
 router.post(
-    '/create-room',
-    validateRequest(RoomValidations.createRoomValidationSchema),
-    RoomControllers.createRoom,
+  '/create-room',
+  validateRequest(RoomValidations.createRoomValidationSchema),
+  RoomControllers.createRoom,
 );
 
 router.get('/:id', RoomControllers.getSingleRoom);
 
 router.patch(
-    '/:id',
-    validateRequest(RoomValidations.updateRoomValidationSchema),
-    RoomControllers.updateRoom,
+  '/:id',
+  validateRequest(RoomValidations.updateRoomValidationSchema),
+  RoomControllers.updateRoom,
 );
 
 router.delete('/:id', RoomControllers.deleteRoom);
 
 router.put(
-    '/:roomId/assign-students',
-    validateRequest(RoomValidations.studentsWithRoomValidationSchema),
-    RoomControllers.assignStudentsWithRoom,
+  '/:roomId/assign-students',
+  validateRequest(RoomValidations.studentsWithRoomValidationSchema),
+  RoomControllers.assignStudentsWithRoom,
 );
 
 router.delete(
-    '/:roomId/remove-students',
-    validateRequest(RoomValidations.studentsWithRoomValidationSchema),
-    RoomControllers.removeStudentsFromRoom,
+  '/:roomId/remove-students',
+  validateRequest(RoomValidations.studentsWithRoomValidationSchema),
+  RoomControllers.removeStudentsFromRoom,
 );
 
 router.get('/', RoomControllers.getAllRooms);
 
 export const RoomRoutes = router;
-
 
 /* Sample data
 {
