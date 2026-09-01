@@ -6,11 +6,11 @@ import { SemesterRegistrationController } from './semesterRegistration.controlle
 const router = express.Router();
 
 router.post(
-    '/create-semester-registration',
-    validateRequest(
-        semesterRegistrationValidations.createSemesterRegistrationValidationSchema,
-    ),
-    SemesterRegistrationController.createSemesterRegistration,
+  '/create-semester-registration',
+  validateRequest(
+    semesterRegistrationValidations.createSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.createSemesterRegistration,
 );
 
 export default router;
